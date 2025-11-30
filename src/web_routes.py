@@ -259,6 +259,32 @@ async def serve_control_panel(request: Request):
         raise HTTPException(status_code=500, detail="服务器内部错误")
 
 
+@router.get("/api-key-admin", response_class=HTMLResponse)
+async def serve_api_key_admin():
+    """提供 API Key 管理面板"""
+    try:
+        html_file_path = "front/api_key_admin.html"
+        with open(html_file_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        log.error(f"加载 API Key 管理面板失败: {e}")
+        raise HTTPException(status_code=500, detail="服务器内部错误")
+
+
+@router.get("/api-key-query", response_class=HTMLResponse)
+async def serve_api_key_query():
+    """提供 API Key 配额查询页面"""
+    try:
+        html_file_path = "front/api_key_query.html"
+        with open(html_file_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        log.error(f"加载 API Key 查询页面失败: {e}")
+        raise HTTPException(status_code=500, detail="服务器内部错误")
+
+
 @router.post("/auth/login")
 async def login(request: LoginRequest):
     """用户登录"""

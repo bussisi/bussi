@@ -21,6 +21,7 @@ from src.gemini_router import router as gemini_router
 from src.openai_router import router as openai_router
 from src.task_manager import shutdown_all_tasks
 from src.web_routes import router as web_router
+from src.chat_api_auth import router as auth_router
 
 # 全局凭证管理器
 global_credential_manager = None
@@ -112,6 +113,9 @@ app.include_router(gemini_router, prefix="", tags=["Gemini Native API"])
 # Web路由 - 包含认证、凭证管理和控制面板功能
 app.include_router(web_router, prefix="", tags=["Web Interface"])
 
+# API认证路由 - 包含API Key管理和配额管理功能
+app.include_router(auth_router, prefix="", tags=["API Authentication"])
+
 # 静态文件路由 - 服务docs目录下的文件（如捐赠图片）
 app.mount("/docs", StaticFiles(directory="docs"), name="docs")
 
@@ -145,6 +149,8 @@ async def main():
     log.info("启动 GCLI2API")
     log.info("=" * 60)
     log.info(f"控制面板: http://127.0.0.1:{port}")
+    log.info(f"   API Key管理: http://127.0.0.1:{port}/api-key-admin")
+    log.info(f"   API Key查询: http://127.0.0.1:{port}/api-key-query")
     log.info("=" * 60)
     log.info("API端点:")
     log.info(f"   OpenAI兼容: http://127.0.0.1:{port}/v1")
